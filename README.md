@@ -1,141 +1,81 @@
-**GitHub Repo Description (برای کپی در بخش About/Description ریپو):**
+# 🧠 Neural Signal Simulator & Analyzer
 
-```
-Neural Signal Simulator & Analyzer — CS50P Final Project. Generate synthetic neural signals (Poisson spike trains, noisy oscillations, Gaussian ERPs) and compute spectral statistics via CLI. Pure Python (NumPy, SciPy) with full test coverage.
-```
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
+![SciPy](https://img.shields.io/badge/SciPy-%230C55A5.svg?style=for-the-badge&logo=scipy&logoColor=white)
+![CS50P](https://img.shields.io/badge/CS50P-Harvard-red?style=for-the-badge)
 
----
-
-**GitHub Topics (برای کپی در بخش Topics ریپو - با کاما جدا کن):**
-
-```
-cs50p, neural-signals, computational-neuroscience, bci, eeg-simulation, spike-trains, erp, python, scipy, numpy
-```
+**CS50P Final Project** — A pure Python command-line tool designed to generate and analyze synthetic neural signals, including spikes, oscillations, and Event-Related Potentials (ERPs).
 
 ---
 
-**README.md (نسخه کامل مصقول برای جایگزینی فایل فعلی - کپی کن و جایگزین کن):**
+## ✨ Features
 
-```markdown
-# Neural Signal Simulator & Analyzer
+- **Spike Trains**: Generate homogeneous Poisson spike processes.
+- **Oscillations**: Create sinusoidal brain waves with controllable noise levels.
+- **ERPs**: Simulate Event-Related Potentials (Gaussian pulses) with additive noise.
+- **Signal Analysis**: Extract time-domain statistics, spectral peak frequencies, and estimate Signal-to-Noise Ratio (SNR).
+- **CLI & API**: Use it directly from your terminal or import it as a Python module. Outputs are saved as `.npz` files.
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![CS50P](https://img.shields.io/badge/CS50P-Final%20Project-orange.svg)](https://cs50.harvard.edu/python/)
+## 🚀 Installation
 
-A command-line tool for **generating synthetic neural signals** and **computing statistical/spectral features** — built as the final project for [CS50's Introduction to Programming with Python (CS50P)](https://cs50.harvard.edu/python/).
-
-#### Video Demo: [Add your YouTube link here]
-
----
-
-## Features
-
-| Signal Type | Description | Parameters |
-|-------------|-------------|------------|
-| **Spike Trains** | Homogeneous Poisson process modeling single-neuron firing | `rate_hz`, `duration_s` |
-| **Oscillations** | Noisy sinusoids (EEG/LFP rhythms: alpha, beta, gamma) | `freq_hz`, `fs`, `noise_level` |
-| **ERPs** | Gaussian event-related potentials (P300-like) | `latency_ms`, `amplitude`, `width_ms` |
-| **Analysis** | Time-domain + spectral stats (peak freq, SNR via periodogram) | `sig`, `fs` |
-
----
-
-## Quick Start
+Clone the repository and install the required dependencies:
 
 ```bash
-# Clone & install
-git clone https://github.com/TheKiyaa/cs50p-neural-signal-simulator.git
-cd cs50p-neural-signal-simulator
+git clone [https://github.com/YourUsername/Neural-Signal-Simulator.git](https://github.com/YourUsername/Neural-Signal-Simulator.git)
+cd Neural-Signal-Simulator
 pip install -r requirements.txt
+```
 
-# Generate signals
+## 💻 Command-Line Usage
+
+Generate a spike train (10 Hz, 1 second):
+```bash
 python project.py --mode spike --rate 10 --duration 1 --output spikes.npz --seed 42
-python project.py --mode osc   --freq 10 --duration 2 --fs 1000 --output alpha.npz --seed 42
-python project.py --mode erp   --latency 300 --amplitude 5 --duration 1 --output erp.npz --seed 42
-
-# Run tests
-pytest test_project.py -v
 ```
 
----
-
-## Project Structure
-
-```
-.
-├── project.py           # Core implementation (5 functions + CLI)
-├── test_project.py      # 4 pytest unit tests (all passing)
-├── requirements.txt     # numpy, scipy
-├── .gitignore           # Excludes __pycache__, *.npz, .pytest_cache
-└── README.md            # This file
+Generate an oscillation (10 Hz alpha wave, 2 seconds, 1000 Hz sampling):
+```bash
+python project.py --mode osc --freq 10 --duration 2 --fs 1000 --output alpha.npz --seed 42
 ```
 
-### Core Functions (`project.py`)
-
-| Function | Returns | Description |
-|----------|---------|-------------|
-| `generate_spike_train(rate_hz, duration_s, seed)` | `np.ndarray` | Sorted spike times (seconds) |
-| `generate_oscillation(freq_hz, duration_s, fs, noise_level, seed)` | `np.ndarray` | Noisy sinusoid samples |
-| `generate_erp(latency_ms, amplitude, duration_s, fs, noise_level, width_ms, seed)` | `np.ndarray` | Gaussian ERP pulse + noise |
-| `analyze_signal(sig, fs)` | `dict` | `mean`, `std`, `peak_freq_hz`, `snr_estimate_db` |
-| `main()` | — | `argparse` CLI entry point |
-
-All functions are **module-level** with type hints and docstrings (CS50P compliant).
-
----
-
-## Design Decisions
-
-- **Synthetic data** — No external dependencies, exact ground truth for testing
-- **Poisson spikes** — Canonical null model for neural spiking statistics
-- **Periodogram (Welch)** — Standard, well-tested spectral estimation via SciPy
-- **CLI + seeds** — Reproducible, scriptable scientific workflows
-- **`.npz` output** — Standard NumPy format preserving arrays + metadata
-
----
-
-## Requirements
-
-```
-numpy>=1.24.0
-scipy>=1.10.0
+Generate an ERP (P300-like at 300ms, 5μV amplitude):
+```bash
+python project.py --mode erp --latency 300 --amplitude 5 --duration 1 --output erp.npz --seed 42
 ```
 
----
+## 🧩 Python API
 
-## Testing
+You can also use the simulator directly in your Python scripts:
+
+```python
+from project import generate_spike_train, generate_oscillation, generate_erp, analyze_signal
+
+# Generate an oscillation signal
+signal = generate_oscillation(freq_hz=10, duration_s=1.0, fs=1000, noise_level=0.1, seed=42)
+
+# Analyze the generated signal
+stats = analyze_signal(signal, fs=1000)
+print(stats)
+# Output: {'mean': ..., 'std': ..., 'peak_freq_hz': 10.0, 'snr_estimate_db': ...}
+```
+
+## 🧪 Testing
+
+This project includes a comprehensive test suite using `pytest`. To run the tests:
 
 ```bash
 pytest test_project.py -v
-# 4 tests: spike train, oscillation, ERP, signal analysis → all PASS
 ```
 
----
+## 📁 Project Structure
 
-## Future Work
-
-- Inhomogeneous Poisson processes (rate-modulated spiking)
-- Multi-component oscillations (cross-frequency coupling)
-- Multi-peak ERPs (N1, P2, P300)
-- Time-frequency analysis (wavelets, spectrograms)
-- Batch generation for ML dataset creation
-
----
-
-## License
-
-MIT License — free to use, modify, and distribute.
+| File | Description |
+|------|-------------|
+| `project.py` | Main implementation containing the 5 core functions and CLI logic. |
+| `test_project.py` | Unit tests for all signal generation and analysis functions. |
+| `requirements.txt` | Project dependencies (`numpy`, `scipy`). |
+| `README.md` | This documentation file. |
 
 ---
-
-## Author
-
-**Mohammad Kia Ghasemi**
-- GitHub: [@TheKiyaa](https://github.com/TheKiyaa)
-- LinkedIn: [mohammad-kia-ghasemi](https://www.linkedin.com/in/mohammad-kia-ghasemi)
-- CS50P Certificate: 2026
-```
-
----
-
-**می‌خوای این README جایگزین کنم در فایل؟** بگو `replace کن` تا بنویسم.
+*This project was created as the Final Project for Harvard's CS50 Introduction to Programming with Python.*
